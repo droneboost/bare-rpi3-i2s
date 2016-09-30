@@ -1,0 +1,21 @@
+This is a Linux kernel module for raspberry pi3 which functions as a
+'codecless i2s soundcard'.  In other words, load either the master or
+slave .ko with insmod, then bare i2s will be input/output to/from the
+pins of the raspberry pi.  You need to ensure samplerates, bit-depths
+etc line up, whereas with most alsa userspace drivers this is not an
+issue...
+
+Tested on raspberry pi3 with arch linux & a custom-compiled RT
+kernel.
+
+Pin 12 = i2s bitclock (bck)
+Pin 35 = i2s word clock (wck)
+Pin 38 = i2s data in to the pi (data_in)
+Pin 40 = i2s data out from the pi (data_out)
+
+You can check it's working by insmod-ing the 'master' kernel module,
+then hooking up ch1 of scope to wck, then set ch1 as the trigger
+source.  Probing bck, you probably see 32 x the frequency square wave.
+Probing data_out you should see all 0 until you output some digital
+data, then with output you should see the individual bits of the data
+words flipping on & off...
